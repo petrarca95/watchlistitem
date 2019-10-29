@@ -1,33 +1,44 @@
 package com.openclassrooms.watchlist;
 
-public class Watchlistitem {
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+public class WatchlistItem {
     public static int index = 0;
 
+    private Integer id;
+    @NotBlank(message = "Please enter the tile")
     private String title;
     private String rating;
+    @Priority
     private String priority;
+    @Size(max=50, message = "Comment should be maximum 50 characters")
     private String comment;
 
 
 
-    public Watchlistitem() {
+    public WatchlistItem() {
 
     }
 
-    public Watchlistitem(String title, String rating, String priority, String comment) {
+    //todo which constructors do I need and when are they called?
+    public WatchlistItem(Integer id, String title, String rating, String priority, String comment) {
+
+        this.id = id;
         this.title = title;
         this.rating = rating;
         this.priority = priority;
         this.comment = comment;
     }
 
-    public static int getIndex() {
-        return index;
+    public Integer getId() {
+        return id;
     }
 
-    public static void setIndex(int index) {
-        Watchlistitem.index = index;
+    public void setId(Integer id) {
+        this.id = id;
     }
+
 
     public String getTitle() {
         return title;
