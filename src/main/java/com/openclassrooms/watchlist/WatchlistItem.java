@@ -3,11 +3,14 @@ package com.openclassrooms.watchlist;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+//* class level (cross-field validation) validation annotations
+@BadMovie
+@GoodMovie
 public class WatchlistItem {
     public static int index = 0;
 
     private Integer id;
-    @NotBlank(message = "Please enter the tile")
+    @NotBlank(message = "Please enter the title")
     private String title;
     private String rating;
     @Priority

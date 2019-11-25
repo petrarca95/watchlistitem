@@ -26,7 +26,7 @@ public class WatchlistController {
     public ModelAndView getIndex(){
         Map<String, Integer > model = new HashMap<>();
 
-        String viewName = "index";
+        String viewName = "home";
 
         return new ModelAndView(viewName, model);
     }
@@ -63,26 +63,37 @@ public class WatchlistController {
     }
 
 
-    //TODO we only want to increment the index for a movie that is new, not after we update an existing movie. New movies will have an ID of null until they are set
-    //todo in order to receive a watchlistItem with an ID field, we need to specify we want to send the id : <input type = "hidden" th:field="*{id}" /> inside the POST form in the html
+    /**
+     ** we only want to increment the index for a movie that is new, not after we update an existing movie. New movies will have an ID of null until they are set
+     ** in order to receive a watchlistItem with an ID field, we need to specify we want to send the id : <input type = "hidden" th:field="*{id}" /> inside the POST form in the html
+     */
+
     @RequestMapping(method = RequestMethod.POST, value ="/watchlistItemForm")
     public ModelAndView submitWatchlistItems(@Valid WatchlistItem watchlistItem, BindingResult bindingResult){
 
+
         if (bindingResult.hasErrors()){
-            //todo how is the object bindingResults, which contains the error messages, getting sent to the view? apparently it is being sent implicitly
-            //todo since errors are correctly populating in the view
+            //* how is the object bindingResults, which contains the error messages, getting sent to the view? apparently it is being sent implicitly since errors are correctly populating in the view
             return new ModelAndView("watchlistItemForm");
         }
 
-        //todo checking to see if if the item in the form is new (has id ==null) or if it is an existing item being updated
+
+        if (itemAlreadyExistsValidation(watchlistItem.getTitle())){
+            //* rejectValue registers a field error for the specified field of the current object (probably the one that was annotated with @Valid) using the given error description, null is needed to make error a global one
+            bindingResult.rejectValue(null,"title", "this movie is already on your watchlist");
+            return new ModelAndView("watchlistItemForm");
+        }
+
+
+        //* checking to see if if the item in the form is new (has id ==null) or if it is an existing item being updated
         if (watchlistItem.getId()==null){
             watchlistItem.setId(WatchlistItem.index++);
             watchlistItems.add(watchlistItem);
         }
-        //todo updating functionality
+        //* updating functionality
         else{
             WatchlistItem existingWatchlistItem = WatchlistUtil.findWatchlistItemById(watchlistItem.getId(), watchlistItems);
-            //TODO existingWatchlistItem already contains a reference to the actual object in the arraylist, no need to remove or add objects from array list when updating
+            //* existingWatchlistItem already contains a reference to the actual object in the arraylist, no need to remove or add objects from array list when updating
             existingWatchlistItem.setTitle(watchlistItem.getTitle());
             existingWatchlistItem.setComment(watchlistItem.getComment());
             existingWatchlistItem.setPriority(watchlistItem.getPriority());
@@ -91,6 +102,7 @@ public class WatchlistController {
 
 
 
+        //* redirecting the view after object is created or updated. This is done by convention so users can see changes right away.
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/watchlist");
         return new ModelAndView(redirectView);
@@ -98,7 +110,14 @@ public class WatchlistController {
 
 
 
-
+private boolean itemAlreadyExistsValidation(String string){
+        for (WatchlistItem watchlistItem: watchlistItems){
+            if (string.equals(watchlistItem.getTitle())){
+                return true;
+            }
+        }
+    return false;
+}
 
 
 }
