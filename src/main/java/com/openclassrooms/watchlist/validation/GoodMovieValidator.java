@@ -1,4 +1,6 @@
-package com.openclassrooms.watchlist;
+package com.openclassrooms.watchlist.validation;
+
+import com.openclassrooms.watchlist.domain.WatchlistItem;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

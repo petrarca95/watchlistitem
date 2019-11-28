@@ -1,5 +1,4 @@
-package com.openclassrooms.watchlist;
-
+package com.openclassrooms.watchlist.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,13 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.FIELD})
-//todo specifies annotation is valid at run time
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy= PriorityValidator.class)
-public @interface Priority {
+@Constraint(validatedBy = GoodMovieValidator.class)
+public @interface GoodMovie {
 
-    String message() default "Please enter M,L or H for priority";
+    String message() default "If a movie is as good as 8 then priority should be at least M";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
