@@ -1,7 +1,10 @@
-package com.openclassrooms.watchlist;
+package com.openclassrooms.watchlist.controller;
 
+import com.openclassrooms.watchlist.domain.WatchlistItem;
+import com.openclassrooms.watchlist.exception.DuplicateTitleException;
+import com.openclassrooms.watchlist.service.WatchlistService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,17 +12,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+
+/**
+** This is the controller component of the presentation/UI layer
+ *! We want to keep this layer as thin as possible
+ ** Responsibilities:
+ ** 1) Receiving and validating inputs
+ ** 2) manipulating Model object, which is then passed to the view component of the presentation layer, remember the presentation layer UI is made up of Model View Controller (MVC)
+ ** 3) returning appropriate ModelAndView , view name.
+ ** 4) communicate with the layer below, the service/business layer which is made up of Service classes
+ */
 @Controller
 public class WatchlistController {
 
-    private List<WatchlistItem> watchlistItems = new ArrayList<>();
+
+//    private WatchlistService watchlistService = new WatchlistService();
+
+    @Autowired
+    private WatchlistService watchlistService;
+
+//    @Autowired
+//    WatchlistController(WatchlistService watchlistService){
+//        this.watchlistService = watchlistService;
+//    }
+
 
 
     @RequestMapping(method = RequestMethod.GET, value ="/")
@@ -36,10 +56,8 @@ public class WatchlistController {
 
 
         Map<String, Object > model = new HashMap<>();
-
-        model.put("watchlistItems", watchlistItems);
-        model.put("numberOfMovies",watchlistItems.size());
-
+        model.put("watchlistItems", watchlistService.getWatchlist());
+        model.put("numberOfMovies",watchlistService.getWatchlistSize());
         String viewName = "watchlist";
 
         return new ModelAndView(viewName, model);
@@ -49,8 +67,9 @@ public class WatchlistController {
     public ModelAndView showWatchListItemForm(@RequestParam(required = false) Integer id){
 
         Map<String, Object > model = new HashMap<>();
-         WatchlistItem watchlistItemFound = WatchlistUtil.findWatchlistItemById(id, watchlistItems);
-        if (watchlistItemFound== null){
+//         WatchlistItem watchlistItemFound = WatchlistUtil.findWatchlistItemById(id, watchlistItems);
+        WatchlistItem watchlistItemFound = watchlistService.findWatchlistItembyId(id);
+        if (watchlistItemFound == null){
            model.put("watchlistItem", new WatchlistItem());
        }
        else{
@@ -77,28 +96,37 @@ public class WatchlistController {
             return new ModelAndView("watchlistItemForm");
         }
 
+//
+//        if (itemAlreadyExistsValidation(watchlistItem.getTitle())){
+//            //* rejectValue registers a field error for the specified field of the current object (probably the one that was annotated with @Valid) using the given error description, null is needed to make error a global one
+//            bindingResult.rejectValue(null,"title", "this movie is already on your watchlist");
+//            return new ModelAndView("watchlistItemForm");
+//        }
 
-        if (itemAlreadyExistsValidation(watchlistItem.getTitle())){
+
+        try{
+            watchlistService.addOrUpdateWatchlistItems(watchlistItem);
+        }
+        catch (DuplicateTitleException e){
             //* rejectValue registers a field error for the specified field of the current object (probably the one that was annotated with @Valid) using the given error description, null is needed to make error a global one
             bindingResult.rejectValue(null,"title", "this movie is already on your watchlist");
             return new ModelAndView("watchlistItemForm");
         }
 
-
         //* checking to see if if the item in the form is new (has id ==null) or if it is an existing item being updated
-        if (watchlistItem.getId()==null){
-            watchlistItem.setId(WatchlistItem.index++);
-            watchlistItems.add(watchlistItem);
-        }
+//        if (watchlistItem.getId()==null){
+//            watchlistItem.setId(WatchlistItem.index++);
+//            watchlistItems.add(watchlistItem);
+//        }
         //* updating functionality
-        else{
-            WatchlistItem existingWatchlistItem = WatchlistUtil.findWatchlistItemById(watchlistItem.getId(), watchlistItems);
-            //* existingWatchlistItem already contains a reference to the actual object in the arraylist, no need to remove or add objects from array list when updating
-            existingWatchlistItem.setTitle(watchlistItem.getTitle());
-            existingWatchlistItem.setComment(watchlistItem.getComment());
-            existingWatchlistItem.setPriority(watchlistItem.getPriority());
-            existingWatchlistItem.setRating(watchlistItem.getRating());
-        }
+//        else{
+//            WatchlistItem existingWatchlistItem = WatchlistUtil.findWatchlistItemById(watchlistItem.getId(), watchlistItems);
+//            //* existingWatchlistItem already contains a reference to the actual object in the arraylist, no need to remove or add objects from array list when updating
+//            existingWatchlistItem.setTitle(watchlistItem.getTitle());
+//            existingWatchlistItem.setComment(watchlistItem.getComment());
+//            existingWatchlistItem.setPriority(watchlistItem.getPriority());
+//            existingWatchlistItem.setRating(watchlistItem.getRating());
+//        }
 
 
 
@@ -107,17 +135,4 @@ public class WatchlistController {
         redirectView.setUrl("/watchlist");
         return new ModelAndView(redirectView);
     }
-
-
-
-private boolean itemAlreadyExistsValidation(String string){
-        for (WatchlistItem watchlistItem: watchlistItems){
-            if (string.equals(watchlistItem.getTitle())){
-                return true;
-            }
-        }
-    return false;
-}
-
-
 }
