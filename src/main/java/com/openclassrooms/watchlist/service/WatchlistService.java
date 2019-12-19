@@ -23,7 +23,7 @@ public class WatchlistService {
     @Autowired
     private WatchlistitemRepository watchlistitemRepository;
     @Autowired
-    private MovieRatingService movieRatingService;
+    private MovieRatingService movieRatingServiceImpl;
 
 //    @Autowired
 //    WatchlistService(WatchlistitemRepository watchlistitemRepository, MovieRatingService movieRatingService){
@@ -46,7 +46,7 @@ public class WatchlistService {
                 throw new DuplicateTitleException();
             }
 
-            String rating = movieRatingService.getMovieRating(watchlistItem.getTitle());
+            String rating = movieRatingServiceImpl.getMovieRating(watchlistItem.getTitle());
 
             //not sure why rating is empty when API returns movie not found message
             if (rating!= null &&  !rating.equals("")){
