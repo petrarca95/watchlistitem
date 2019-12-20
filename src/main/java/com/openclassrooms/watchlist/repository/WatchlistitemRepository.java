@@ -1,7 +1,6 @@
 package com.openclassrooms.watchlist.repository;
 
 import com.openclassrooms.watchlist.domain.WatchlistItem;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
  */
 
 
-@Repository
+//@Repository
 public class WatchlistitemRepository {
 
     private List<WatchlistItem> watchlistItems = new ArrayList<>();
