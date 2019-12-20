@@ -1,0 +1,5 @@
+server:
+  port: 8080
+
+message: Development mode is on
+mode: dev

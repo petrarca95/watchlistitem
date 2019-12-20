@@ -3,12 +3,10 @@ package com.openclassrooms.watchlist.service;
 import com.openclassrooms.watchlist.domain.WatchlistItem;
 import com.openclassrooms.watchlist.exception.DuplicateTitleException;
 import com.openclassrooms.watchlist.repository.WatchlistitemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+//@Service
 public class WatchlistService {
 
     /**
@@ -20,16 +18,14 @@ public class WatchlistService {
 //    private WatchlistitemRepository watchlistitemRepository =  new WatchlistitemRepository();
 //    private MovieRatingService movieRatingService = new MovieRatingService();
 
-    @Autowired
     private WatchlistitemRepository watchlistitemRepository;
-    @Autowired
     private MovieRatingService movieRatingServiceImpl;
 
 //    @Autowired
-//    WatchlistService(WatchlistitemRepository watchlistitemRepository, MovieRatingService movieRatingService){
-//        this.watchlistitemRepository = watchlistitemRepository;
-//        this.movieRatingService = movieRatingService;
-//    }
+    public WatchlistService(WatchlistitemRepository watchlistitemRepository, MovieRatingService movieRatingService){
+        this.watchlistitemRepository = watchlistitemRepository;
+        this.movieRatingServiceImpl = movieRatingService;
+    }
 
 
     public List<WatchlistItem> getWatchlist (){
