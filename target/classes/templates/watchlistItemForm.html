@@ -44,10 +44,11 @@
         			<span class="text-danger" th:errors="*{global}" > </span>
       			</div>
             </div>
+
             <div class = "form-group row ">
                <label for = "title" class = "col-sm-2 col-form-label">Title</label>
                <div class = "col-sm-4">
-<!--                  th:field used to get data from form input and populate our object that will be sent-->
+<!--                  th:field used to get data from form input and populate our object that will be sent, maps input field to title variable of command object-->
                   <input type = "text" class = "form-control" placeholder = "Mandatory" th:field="*{title}">
                </div>
                <div class="col-sm-4">
