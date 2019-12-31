@@ -1,6 +1,8 @@
 package com.openclassrooms.watchlist.repository;
 
 import com.openclassrooms.watchlist.domain.WatchlistItem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +26,20 @@ import java.util.List;
 //@Repository
 public class WatchlistitemRepository {
 
+
     private List<WatchlistItem> watchlistItems = new ArrayList<>();
+//
+//    @Autowired
+//    private JdbcTemplate jdbcTemplate;
+
+
 
 
     public List<WatchlistItem> getList(){
         return watchlistItems;
     }
+
+
 
     public void addItem(WatchlistItem watchlistItem){
         watchlistItem.setId(WatchlistItem.index++);
