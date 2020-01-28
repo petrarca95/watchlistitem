@@ -13,14 +13,10 @@ import org.springframework.context.annotation.Profile;
 ** Note we do not need to instantiate an ApplicationContext Annotation implementation to add all our beans to a container. It seems like Spring Auto Component Scanning picks this class up.
  ** and beans defined in here are registered in a container.
  */
-
-
 //*either @Profile or @ConditionalOnProperty can be used
 
-
-
-//* @Configuration class was scanned automatically (because of @SpringBootApplication), therefore we did not have to load separately
-
+//* @Configuration class was scanned automatically (because of @SpringBootApplication)
+//* If XML is used to configure and inject beans, we need to load the XML to a configuration class, either this one or the one defined by @SpringBootApplication
 @Configuration
 public class AppConfig {
 

@@ -22,6 +22,7 @@ public class WatchlistService {
     private MovieRatingService movieRatingServiceImpl;
 
 //    @Autowired
+
     public WatchlistService(WatchlistitemRepository watchlistitemRepository, MovieRatingService movieRatingService){
         this.watchlistitemRepository = watchlistitemRepository;
         this.movieRatingServiceImpl = movieRatingService;
