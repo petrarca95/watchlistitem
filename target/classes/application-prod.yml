@@ -1,5 +1,16 @@
 server:
   port: 9090
 
+#here we set logging specific to environment, in prod, we want to log everything INFO and above, except for the movie rating api called, which we want to log the .debug called
+logging:
+  level:
+    root: INFO
+    #here we fine tune logging by stating we want to log the debug level which is used in the method that calls the API
+    #even though for the rest of the app we are logging at a INFO and above level
+    #we do this to show fine tuning capabilities, but in reality we want to log external calls at INFO level, some other details which are less critical maybe be logged with debug
+    com.openclassrooms.watchlist.service.MovieRatingServiceLiveImpl: DEBUG
+
+
 message: Production Mode is on
 mode: prod
+

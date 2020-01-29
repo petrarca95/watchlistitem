@@ -3,6 +3,7 @@ package com.openclassrooms.watchlist.controller;
 import com.openclassrooms.watchlist.domain.WatchlistItem;
 import com.openclassrooms.watchlist.exception.DuplicateTitleException;
 import com.openclassrooms.watchlist.service.WatchlistService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import java.util.Map;
  ** 4) communicate with the layer below, the service/business layer which is made up of Service classes
  */
 @Controller
+@Slf4j
 public class WatchlistController {
 
 
@@ -48,11 +50,14 @@ public class WatchlistController {
 
         String viewName = "home";
 
+
         return new ModelAndView(viewName, model);
     }
 
     @RequestMapping(method = RequestMethod.GET, value ="/watchlist")
     public ModelAndView getWatchlistItems(){
+        log.info("GET /watchlist called");
+
 
 
         Map<String, Object > model = new HashMap<>();
@@ -65,6 +70,10 @@ public class WatchlistController {
 
     @RequestMapping(method = RequestMethod.GET, value ="/watchlistItemForm")
     public ModelAndView showWatchListItemForm(@RequestParam(required = false) Integer id){
+
+        log.info("GET /watchlistItemForm called");
+
+
 
         Map<String, Object > model = new HashMap<>();
 //         WatchlistItem watchlistItemFound = WatchlistUtil.findWatchlistItemById(id, watchlistItems);
@@ -89,6 +98,8 @@ public class WatchlistController {
 
     @RequestMapping(method = RequestMethod.POST, value ="/watchlistItemForm")
     public ModelAndView submitWatchlistItems(@Valid WatchlistItem watchlistItem, BindingResult bindingResult){
+
+        log.info("POST /watchlistItemForm called");
 
 
         if (bindingResult.hasErrors()){

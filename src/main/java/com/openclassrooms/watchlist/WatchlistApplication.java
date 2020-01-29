@@ -16,10 +16,10 @@ public class WatchlistApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = SpringApplication.run(WatchlistApplication.class, args);
-		String[] allBeans = applicationContext.getBeanDefinitionNames();
-		for (String beanName : allBeans) {
-			System.out.println(beanName);
-		}
+//		String[] allBeans = applicationContext.getBeanDefinitionNames();
+//		for (String beanName : allBeans) {
+//			System.out.println(beanName);
+//		}
 //		System.out.println(applicationContext.getBean("movieRatingServiceLiveImpl").toString());
 
 	}

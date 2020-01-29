@@ -1,6 +1,7 @@
 package com.openclassrooms.watchlist.service;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 //@Service("MovieRatingServiceLiveImpl")
 //@Service
 //@Profile("prod")
+@Slf4j
 public class MovieRatingServiceLiveImpl implements MovieRatingService {
 
     String apiUrl = "http://www.omdbapi.com/?apikey=ac58dccb&t=";
@@ -19,9 +21,13 @@ public class MovieRatingServiceLiveImpl implements MovieRatingService {
         try {
             RestTemplate template = new RestTemplate();
 
+            log.debug("Calling OMdAPI with url "+apiUrl+" to retrieve info of movie with title "+title);
+
+
             //** getForEntity used to make a GET request
             ResponseEntity<ObjectNode> response =
                     template.getForEntity(apiUrl + title, ObjectNode.class);
+
 
             ObjectNode jsonObject = response.getBody();
 

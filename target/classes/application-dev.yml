@@ -3,3 +3,8 @@ server:
 
 message: Development mode is on
 mode: dev
+
+
+logging:
+  level:
+    root:DEBUG

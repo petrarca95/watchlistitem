@@ -4,22 +4,28 @@ import com.openclassrooms.watchlist.validation.BadMovie;
 import com.openclassrooms.watchlist.validation.GoodMovie;
 import com.openclassrooms.watchlist.validation.Priority;
 
+import javax.validation.GroupSequence;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 //* class level (cross-field validation) validation annotations
 @BadMovie
 @GoodMovie
+//@GroupSequence(groups = {FieldChecks.class, ClassChecks.class})
+//@ColumnNameUnique(groups = ClassChecks.class)
 public class WatchlistItem {
     public static int index = 0;
 
     private Integer id;
     @NotBlank(message = "Please enter the title")
     private String title;
+    @NotBlank(message = "Please enter the rating")
     private String rating;
     @Priority
+    @NotBlank(message = "Please enter the priority")
     private String priority;
     @Size(max=50, message = "Comment should be maximum 50 characters")
+    @NotBlank(message = "Please enter the comment")
     private String comment;
 
 
